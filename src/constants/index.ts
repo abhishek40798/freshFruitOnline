@@ -7,6 +7,8 @@ import localShipping from "../assets/icons/local_shipping.svg";
 import call from "../assets/icons/call.svg";
 import refresh from "../assets/icons/autorenew.svg";
 import product1 from "../assets/img/product-img-1.jpg";
+import product2 from "../assets/img/product-img-2.jpg";
+import product3 from "../assets/img/product-img-3.jpg";
 
 export const images = {
     logo,
@@ -17,11 +19,19 @@ export const images = {
     localShipping,
     call,
     refresh,
-    product1
+    product1,
+    product2,
+    product3
 };
 
 export const colors = {
     primaryColor: "#f28123",
     white: "#FFF",
     black: "#000",
+};
+
+
+export const convertRupeesToDollars = (rupees: number) => {
+    const  dollars = Math.floor(rupees / 83);
+    return `${dollars}$`;
 };

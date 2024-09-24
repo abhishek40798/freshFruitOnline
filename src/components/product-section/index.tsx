@@ -1,14 +1,16 @@
-import { colors, images } from "@/constants";
-import Image from "next/image";
+import { colors, convertRupeesToDollars, images } from "@/constants";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React from "react";
 import styled from "styled-components";
 import FButton from "../FButton";
+import ProductDialog from "../dialogs/productDialog";
 
 const Wrapper = styled.div`
   max-width: 960px;
   width: 100%;
-  margin: 150px auto;
+  margin: auto;
+  padding: 150px 0;
 `;
 
 const Row = styled.div`
@@ -69,7 +71,6 @@ const ProductItem = styled.div`
 `;
 
 const ProductImageSection = styled.div`
-  padding: 60px;
   padding-bottom: 0;
 `;
 
@@ -87,95 +88,93 @@ const Text = styled.p`
   margin-bottom: 15px;
 `;
 
+interface ProductProps {
+  img: StaticImageData;
+  name: string;
+  rupees: number;
+}
+
+const products: ProductProps[] = [
+  {
+    img: images.product1,
+    name: "Strawberry",
+    rupees: 7103,
+  },
+  {
+    img: images.product2,
+    name: "Berry",
+    rupees: 5849,
+  },
+  {
+    img: images.product3,
+    name: "Lemon",
+    rupees: 2924,
+  },
+];
+
 const ProductSection = () => {
+  const [isDialogOpen, setDialogOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
-    <Wrapper>
-      <Row>
-        <OffsetLg2 className="col-lg-8 offset-lg-2 text-center">
-          <SectionTitle>
-            <h3>
-              <span style={{ color: `${colors.primaryColor}` }}>Our</span>{" "}
-              Products
-            </h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid,
-              fuga quas itaque eveniet beatae optio.
-            </p>
-          </SectionTitle>
-        </OffsetLg2>
-      </Row>
+    <>
+      <Wrapper>
+        <Row>
+          <OffsetLg2 className="col-lg-8 offset-lg-2 text-center">
+            <SectionTitle>
+              <h3>
+                <span style={{ color: `${colors.primaryColor}` }}>Our</span>{" "}
+                Products
+              </h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Aliquid, fuga quas itaque eveniet beatae optio.
+              </p>
+            </SectionTitle>
+          </OffsetLg2>
+        </Row>
 
-      <Row>
-        <ProductBox>
-          <ProductItem>
-            <ProductImageSection>
-              <Link href="">
-                <Image
-                  src={images.product1}
-                  alt=""
-                  style={{
-                    width: "220px",
-                    height: "220px",
-                    objectFit: "contain",
-                  }}
-                />
-              </Link>
-            </ProductImageSection>
-            <h3>Strawberry</h3>
-            <Text>
-              <span>Per Kg</span> 70${" "}
-            </Text>
-            <FButton text="Add to cart" />
-          </ProductItem>
-        </ProductBox>
+        <Row>
+          {products.map((product, i) => (
+            <ProductBox key={i}>
+              <ProductItem>
+                <ProductImageSection>
+                  <Link href="">
+                    <Image
+                      src={product.img}
+                      alt=""
+                      style={{
+                        width: "220px",
+                        height: "220px",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </Link>
+                </ProductImageSection>
+                <h3>{product.name}</h3>
+                <Text>
+                  <span>Per Kg</span> {convertRupeesToDollars(product.rupees)}
+                </Text>
+                <FButton text="Add to cart" />
+              </ProductItem>
+            </ProductBox>
+          ))}
+        </Row>
 
-        <ProductBox>
-          <ProductItem>
-            <ProductImageSection>
-              <Link href="">
-                <Image
-                  src={images.product1}
-                  alt=""
-                  style={{
-                    width: "220px",
-                    height: "220px",
-                    objectFit: "contain",
-                  }}
-                />
-              </Link>
-            </ProductImageSection>
-            <h3>Strawberry</h3>
-            <Text>
-              <span>Per Kg</span> 70${" "}
-            </Text>
-            <FButton text="Add to cart" />
-          </ProductItem>
-        </ProductBox>
+        <div style={{ textAlign: "center", marginTop: "30px" }}>
+          <FButton
+            text="Add Product"
+            icon={<Image src={images.Cart} alt="" />}
+            onClick={()=> setDialogOpen(true)}
+          />
+        </div>
+      </Wrapper>
 
-        <ProductBox>
-          <ProductItem>
-            <ProductImageSection>
-              <Link href="">
-                <Image
-                  src={images.product1}
-                  alt=""
-                  style={{
-                    width: "220px",
-                    height: "220px",
-                    objectFit: "contain",
-                  }}
-                />
-              </Link>
-            </ProductImageSection>
-            <h3>Strawberry</h3>
-            <Text>
-              <span>Per Kg</span> 70${" "}
-            </Text>
-            <FButton text="Add to cart" />
-          </ProductItem>
-        </ProductBox>
-      </Row>
-    </Wrapper>
+      {isDialogOpen && <ProductDialog isOpen={isDialogOpen} onCLose={handleClose} />}
+    </>
   );
 };
 
